@@ -1,0 +1,60 @@
+function [ tree ] = ID3( data, attributeNames, activeAttributes, numOfBins )
+% ID3 Creates a decision tree from the given data based on the ID3
+% algorithm
+%   dataAttributes -        dataset to be used
+%   attributeNames -        names of each attribute column to distinguish
+%                           the branch in the tree
+%   activeAttributes -      marks each attribute. If the attribute was
+%                           already used in the tree then it is marked as 0
+%   numOfBins-              designates the number of bins to use to
+%                           discretize the data
+
+% Tree node that will be returned
+tree = struct('value', 'null');
+
+% If all datapoints left are the same classification then we will return
+if size(unique(data(:,5))) == 1
+    tree.value = unique(data(:,5));
+end
+
+m = size(data,1);
+% Probability of each classification in the training set
+%   1: setosa
+%   2: versicolor
+%   3: virginica
+prob = [sum(data(:,5) == 1) sum(data(:,5) == 2) sum(data(:,5) == 3) ]./m;
+parentEntropy = sum((prob.*-1).*log2(prob));
+
+% If we have no more attributes left then we will return the highest prob
+if sum(activeAttributes) == 0
+    [x,i] = max(prob);
+    tree.value = attributeNames{i};
+end
+
+informationGain = [];
+for i = 1:4
+    if activeAttributes(i) == 1
+        [n, x] = hist(data(:,i), numOfBins)
+        prob = n/sum(n);
+        optionEntropy = (prob.*-1).*log2(prob);
+        optionEntropy(isnan(optionEntropy)) = 0;
+        attrEntropy = prob*optionEntropy.';
+        informationGain = [informationGain parentEntropy-attrEntropy];
+    end
+end
+[~,i] = max(informationGain);
+tree.value = attributeNames{i};
+
+% prepare all branches of the tree
+branches = [];
+for j = 1:numOfBins
+    name = strcat('b', num2str(j));
+    % split data for the branch
+    [n,x] = hist(data(:,i));
+    margin = (x(2)- x(1))/2;
+    newData = 
+    tree.(name) = 1;%ID3();
+end
+
+end
+
