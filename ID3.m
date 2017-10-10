@@ -1,4 +1,4 @@
-function [ tree ] = ID3( data, attributeNames, activeAttributes, numOfBins )
+function [ tree ] = ID3( data, attributeNames, activeAttributes, numOfBins, varargin )
 % ID3 Creates a decision tree from the given data based on the ID3
 % algorithm
 %   dataAttributes -        dataset to be used
@@ -8,9 +8,16 @@ function [ tree ] = ID3( data, attributeNames, activeAttributes, numOfBins )
 %                           already used in the tree then it is marked as 0
 %   numOfBins-              designates the number of bins to use to
 %                           discretize the data
+%   varargin-               The only expected additional argument is the
+%                           range to give the tree node.
 
 % Tree node that will be returned
 tree = struct('value', 'null');
+if size(varargin) > 0
+    tree.range = varargin(1);
+else
+    tree.range = [-Inf() Inf()];
+end
 
 % If all datapoints left are the same classification then we will return
 if size(unique(data(:,5))) == 1
@@ -54,7 +61,7 @@ tree.value = attributeNames{i};
 % prepare all branches of the tree
 branches = [];
 total = 0;
-[n,x] = hist(data(:,i));
+[n,x] = hist(data(:,i), numOfBins);
 branchCount = 1;
 for j = 1:numOfBins
     name = strcat('b', num2str(branchCount));
@@ -63,16 +70,18 @@ for j = 1:numOfBins
         continue;
     end
     margin = (x(2)- x(1))/2;
+    lower = x(j) - margin;
+    upper = x(j) + margin;
     if j == 1
-        newData = data( data(:,i)<x(j)+margin,:);
+        newData = data( data(:,i)<upper,:);
     elseif j == numOfBins
-        newData = data( data(:,i)>=x(j)-margin,:);
+        newData = data( data(:,i)>=lower,:);
     else
-        newData = data( data(:,i)>=x(j)-margin & data(:,i)<x(j)+margin,:);
+        newData = data( data(:,i)>=lower & data(:,i)<upper,:);
     end
     total = total + size(newData, 1);
     activeAttributes(i) = 0;
-    tree.(name) = ID3(newData, attributeNames, activeAttributes, numOfBins);
+    tree.(name) = ID3(newData, attributeNames, activeAttributes, numOfBins, [lower, upper]);
     branchCount = branchCount + 1;
 end
 return
