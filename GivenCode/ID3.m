@@ -103,14 +103,14 @@ classdef ID3<handle
         function Entropy = CalculateEntropy(~, P_ve, All)
             %----------------------------------------------------------
             %#fill_in: calculate positive samples proportion
-            P_ratio = 
+            P_ratio = P_ve/All;
             %#fill_in: calculate negative samples proportion
-            N_ratio = 
+            N_ratio = 1-P_ratio;
             %----------------------------------------------------------
             
             %----------------------------------------------------------
             %#fill_in: calculate the positive part of the entropy
-            PositivePart = 
+            PositivePart = -1 * P_ratio * log2(P_ratio);
             %----------------------------------------------------------
             
             %set to zero if we get NAN or Inf
@@ -120,7 +120,7 @@ classdef ID3<handle
             
             %----------------------------------------------------------
             %#fill_in: calculate the negative part of the entropy
-            NegativePart = 
+            NegativePart = -1 * N_ratio * log2(N_ratio);
             %----------------------------------------------------------
             
             %set to zero if we get NAN or Inf
@@ -130,7 +130,7 @@ classdef ID3<handle
             
             %----------------------------------------------------------
             %#fill_in: calculate entropy
-            Entropy = 
+            Entropy = PositivePart + NegativePart;
             %----------------------------------------------------------
         end
         
@@ -163,7 +163,7 @@ classdef ID3<handle
             
             %----------------------------------------------------------
             %#fill_in: calculate the information gain (using the value of entropy and the function obj.SumForInfoGain)
-            InfoGain = 
+            InfoGain = entropy - obj.SumForInfoGain(Data, Attribute);
             %----------------------------------------------------------
         end
     end
