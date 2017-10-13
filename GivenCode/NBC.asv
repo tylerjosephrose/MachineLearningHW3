@@ -61,23 +61,23 @@ classdef NBC<handle
             NumOfAllSamples = size(Data, 1);
             
             %#fill_in: count the number of samples that have a label = obj.species (number of raws in "RowsSpecies")
-            NumSpecies = size(RowsSpecies,1);
+            NumSpecies = size(RowSpecies
             
             %#fill_in: count the number of samples that have a label other than obj.species (number of raws in "RowsNotSpecies")
-            NumNotSpecies = size(RowsNotSpecies,1);
+            NumNotSpecies = 
             %----------------------------------------------------------
             
             %----------------------------------------------------------
             %#fill_in: calculate the probability that a randomly
             %selected sample will have a label = to obj.species
             %(by using the values you got above)
-            obj.Probability_species = NumSpecies/NumOfAllSamples;
+            obj.Probability_species = 
             
             %#fill_in: calculate the probability that a randomly
             %selected sample will have any label other than a label =
             %obj.species
             %(by using the values you got above)
-            obj.Probability_Not_species = NumNotSpecies/NumOfAllSamples;
+            obj.Probability_Not_species =
             %----------------------------------------------------------
             
             
@@ -109,7 +109,7 @@ classdef NBC<handle
                 %
                 %to use the function pass the columns 1 to 4 as first
                 %parameter and the value true as second parameter
-                NB_Species_positive = obj.Probability_species * obj.MultipliedLikelyHoods(Data(i,1:4), 1);
+                NB_Species_positive = 
                 %----------------------------------------------------------
                 
                 %----------------------------------------------------------
@@ -119,7 +119,7 @@ classdef NBC<handle
                 %
                 %to use the function pass the columns 1 to 4 as first
                 %parameter and the value false as second parameter
-                NB_Species_Negative = obj.Probability_Not_species * obj.MultipliedLikelyHoods(Data(i,1:4), 0);
+                NB_Species_Negative = 
                 %----------------------------------------------------------
                 
                 %classify based on which probability is higher

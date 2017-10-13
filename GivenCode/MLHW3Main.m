@@ -88,22 +88,22 @@ for j=5:5:20
         %get indecies of correct guesses
         
         MatResultsTree = cell2mat(ResultsTree);
-        MatResultsNBC = %  INSERT THE NEEDED CODE HERE 
+        MatResultsNBC = cell2mat(ResultsNBC);
         
         TreeSuccessIndices = ((MatResultsTree(:, 6) == 1) & (MatResultsTree(:, 5) == 1)) | ((MatResultsTree(:, 6) == 0) & ~(MatResultsTree(:, 5) == 1));
         
-        BayesSuccessIndices = %INSERT THE NEEDED CODE HERE 
+        BayesSuccessIndices = ((MatResultsNBC(:, 6) == 1) & (MatResultsNBC(:, 5) == 1)) | ((MatResultsNBC(:, 6) == 0) & ~(MatResultsNBC(:, 5) == 1));
         
-        NumberOfSuccessTree = length(TreeSuccessIndecies(TreeSuccessIndices~=0));
-        NumberOfSuccessNBC = %INSERT THE NEEDED CODE HERE 
+        NumberOfSuccessTree = length(TreeSuccessIndices(TreeSuccessIndices~=0));
+        NumberOfSuccessNBC = length(BayesSuccessIndices(BayesSuccessIndices~=0));
         
         %calculate accuracy                    
         AccuracyTree = NumberOfSuccessTree/75*100;
-        AccuracyNBC = %INSERT THE NEEDED CODE HERE 
+        AccuracyNBC = NumberOfSuccessNBC/75*100;
         
         %store accuracy in vector
         AccuraciesTree_EachBin(i) = AccuracyTree;
-        AcuuraciesNBC_EachBin(i) = %INSERT THE NEEDED CODE HERE 
+        AcuuraciesNBC_EachBin(i) = AccuracyNBC;
     end
     
     %get min max avg for the 10 runs
@@ -111,16 +111,16 @@ for j=5:5:20
     AccuraciesTree(j/5, MAX_ACCURACY) = max(AccuraciesTree_EachBin);
     AccuraciesTree(j/5, AVG_ACCURACY) = mean(AccuraciesTree_EachBin);
     
-    AccuraciesNBC(j/5, MIN_ACCURACY) = %INSERT THE NEEDED CODE HERE 
-    AccuraciesNBC(j/5, MAX_ACCURACY) = %INSERT THE NEEDED CODE HERE 
-    AccuraciesNBC(j/5, AVG_ACCURACY) = %INSERT THE NEEDED CODE HERE 
+    AccuraciesNBC(j/5, MIN_ACCURACY) = min(AcuuraciesNBC_EachBin);
+    AccuraciesNBC(j/5, MAX_ACCURACY) = max(AcuuraciesNBC_EachBin);
+    AccuraciesNBC(j/5, AVG_ACCURACY) = mean(AcuuraciesNBC_EachBin);
 end
 
 hFig = figure('Name', 'Min/Max/Avg accuracies at different bin numbers (10 runs)');
 set(hFig, 'Position', [300 150 1200 800]);
 
 %tree results
-subplot(2,2,1);
+subplot(2,1,1);
 TreePlotHandle = plot(5:5:20, AccuraciesTree(:, MIN_ACCURACY), '-rs', ...
                         5:5:20, AccuraciesTree(:, MAX_ACCURACY), '-bs', ...
                         5:5:20, AccuraciesTree(:, AVG_ACCURACY), '-gs');
@@ -132,7 +132,7 @@ ylabel('Accuracy');
 xlabel('Bin number');
 
 %NBC results
-subplot(2,2,2);
+subplot(2,1,2);
 NBCPlotHandle = plot(5:5:20, AccuraciesNBC(:, MIN_ACCURACY), '--ro', ...
                         5:5:20, AccuraciesNBC(:, MAX_ACCURACY), '--bo', ...
                         5:5:20, AccuraciesNBC(:, AVG_ACCURACY), '--go');
